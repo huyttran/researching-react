@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  /* text-align: center; */
 }
 
 .App-logo {
@@ -23,10 +23,44 @@
   color: #61dafb;
 }
 
+#content {
+  padding: 18px;
+  border: 1px solid red;
+}
+
+.span1 {
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+  margin: 0 2px;
+}
+
+.span1:hover {
+  cursor: pointer;
+}
+
+.active1 {
+  border: 3px solid black;
+}
+
+.routeActive {
+  background-color: white;
+  color: red;
+}
+
+.routeActive a {
+  color: red !important;
+}
+
+.mt-30 {
+  margin-top: 30px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
