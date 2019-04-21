@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import { onSetKeyWord } from '../../actions';
 
 class Search extends Component {
     constructor(props) {
@@ -18,7 +20,7 @@ class Search extends Component {
     }
 
     onSubmit = () => {
-        this.props.onSearch(this.state.keyWord);
+        this.props.onSetKeyWord(this.state.keyWord);
     }
 
     render() {
@@ -46,4 +48,12 @@ class Search extends Component {
         );
     }
 }
-export default Search;
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onSetKeyWord: (keyWord) => {
+            dispatch(onSetKeyWord(keyWord));
+        }
+    }
+};
+export default connect(null, mapDispatchToProps)(Search);

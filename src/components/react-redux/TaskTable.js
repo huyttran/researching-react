@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import TaskItem from './TaskItem';
+import { connect } from 'react-redux'
 
 class TaskTable extends Component {
     constructor(props) {
@@ -13,25 +14,52 @@ class TaskTable extends Component {
     onChangHandler = (event) => {
         const target = event.target;
         const name = target.name;
-        let value = target.value;
-        this.props.onFilter(
-            name === "filterName" ? value : this.state.filterName,
-            name === "filterStatus" ? value : this.state.filterStatus);
+        let value = (name === "filterStatus") ? parseInt(target.value, 10) : target.value;
         this.setState({
             [name]: value
         });
     }
 
     render() {
-        const { tasks, filterName, filterStatus } = this.props;
+        let { tasks, keyWord, sortOptions } = this.props;
+        let { filterName, filterStatus } = this.state;
+
+        if (filterName) {
+            tasks = tasks.filter(task => {
+                return task.name.toLowerCase().indexOf(filterName) !== -1;
+            });
+        }
+
+        if (filterStatus !== -1) {
+            tasks = tasks.filter(task => {
+                return task.status === (filterStatus === 1 ? true : false);
+            });
+        }
+
+        if (keyWord) {
+            tasks = tasks.filter(task => task.name.toLowerCase().indexOf(keyWord.toLowerCase()) !== -1);
+        }
+
+        if (sortOptions.sortBy === 'name') {
+            tasks.sort((prev, next) => {
+                if (prev.name < next.name) return -sortOptions.sortValue;
+                if (prev.name > next.name) return sortOptions.sortValue;
+                else return 0;
+            });
+        } else {
+            tasks.sort((prev, next) => {
+                if (prev.status < next.status) return sortOptions.sortValue;
+                if (prev.status > next.status) return -sortOptions.sortValue;
+                else return 0;
+            });
+        }
+
         const elemTaskItem = tasks.map((task, index) => {
             return <TaskItem
                 key={task.id}
                 index={index}
                 task={task}
                 onUpdateStatus={this.props.onUpdateStatus}
-                onDeleteItem={this.props.onDeleteItem}
-                onUpdateItem={this.props.onUpdateItem}
             />;
         });
         return (
@@ -78,4 +106,10 @@ class TaskTable extends Component {
         );
     }
 }
-export default TaskTable;
+const mapStateToProps = state => ({
+    tasks: state.tasks,
+    keyWord: state.keyWord,
+    sortOptions: state.sortOptions
+});
+
+export default connect(mapStateToProps, null)(TaskTable);

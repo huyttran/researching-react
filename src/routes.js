@@ -7,6 +7,7 @@ import Login from './components/react-router/Login';
 import NotFound from './components/react-router/NotFound';
 import Form from './components/react-router/Form';
 import TodoList from './components/todolist-project/TodoList';
+import ReactRedux from './components/react-redux/React-Redux';
 
 const routes = [
     {
@@ -43,6 +44,11 @@ const routes = [
         path: '/todolist',
         exact: false,
         main: () => <TodoList />
+    },
+    {
+        path: '/react-redux',
+        exact: false,
+        main: () => <ReactRedux />
     },
     {
         path: '',

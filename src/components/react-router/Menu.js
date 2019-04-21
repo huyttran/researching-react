@@ -36,6 +36,11 @@ const menuList = [
         to: '/todolist',
         label: 'ToDoList',
         exact: false
+    },
+    {
+        to: '/react-redux',
+        label: 'React-Redux',
+        exact: false
     }
 ]
 const MenuLink = ({ label, to, activeOnlyWhenExact }) => {

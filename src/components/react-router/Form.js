@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { timingSafeEqual } from 'crypto';
 
 class Form extends Component {
     constructor(props) {
@@ -23,8 +22,8 @@ class Form extends Component {
     }
     onSubmit = (e) => {
         e.preventDefault();
-        const { txtUsername } = this.state;
-        console.log(this.state);
+        // const { txtUsername } = this.state;
+        // console.log(this.state);
     }
     render() {
         // const { txtUsername } = this.state;

@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import { onCloseForm, onSaveTask } from '../../actions/index'
+
 
 class TaskForm extends Component {
     constructor(props) {
@@ -7,17 +10,6 @@ class TaskForm extends Component {
             id: '',
             name: '',
             status: true
-        }
-    }
-
-    componentWillMount() {
-        if (this.props.taskEditing) {
-            const { id, name, status } = this.props.taskEditing;
-            this.setState({
-                id: id,
-                name: name,
-                status: status
-            });
         }
     }
 
@@ -38,9 +30,11 @@ class TaskForm extends Component {
         }
 
     }
+
     onCloseForm = () => {
         this.props.onCloseForm();
     }
+
     onChangHandler = (event) => {
         const target = event.target;
         const name = target.name;
@@ -52,11 +46,21 @@ class TaskForm extends Component {
             [name]: value
         });
     }
+
     onSubmit = (event) => {
         event.preventDefault();
-        this.props.onAddTask(this.state);
+        // This solution is not good => every bussiness logic that handled in reducer
+        // if (this.state.id) {
+        //     this.props.onUpdateTask(this.state);
+        // } else {
+        //     this.props.createTask(this.state);
+        // }
+        this.props.onSaveTask(this.state);
         this.onClearForm();
-        this.onCloseForm();
+        const { taskEditing } = this.props;
+        if (taskEditing && taskEditing.id) {
+            this.onCloseForm();
+        }
     }
 
     onClearForm = () => {
@@ -66,7 +70,9 @@ class TaskForm extends Component {
         });
     }
     render() {
+        const { isDisplayForm } = this.props;
         const { id, name, status } = this.state;
+        if (!isDisplayForm) return '';
         return (
             <div className="panel panel-warning">
                 <div className="panel-heading">
@@ -115,4 +121,21 @@ class TaskForm extends Component {
         );
     }
 }
-export default TaskForm;
+
+const mapStateToProps = state => ({
+    isDisplayForm: state.isDisplayForm,
+    taskEditing: state.taskEditing
+});
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onCloseForm: (task) => {
+            dispatch(onCloseForm(task))
+        },
+        onSaveTask: (task) => {
+            dispatch(onSaveTask(task))
+        }
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaskForm);
